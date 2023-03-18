@@ -139,4 +139,4 @@ i remove all the unescessary files that install with the apt update
 GitHub Action that will automatically build and push the image to your Docker Hub
 account (the workflow should be initiated by the user). Provide the YAML of the
 workflow you made</h5>
-in the file .github/workflows the yaml file
+in the file .github/workflows the yaml file.
