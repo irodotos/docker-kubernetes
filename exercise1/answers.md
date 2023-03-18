@@ -38,7 +38,7 @@ Commercial support is available at
 </html>
 ```
 <h5>d) Confirm that the container is running in Docker</h5>
-``` sudo docker ps ```
+<code> sudo docker ps </code>
 <p>CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                                   NAMES<br>
 01c2b85ce367   nginx:1.23.3   "/docker-entrypoint.…"   8 minutes ago   Up 8 minutes   0.0.0.0:8080->80/tcp, :::8080->80/tcp   charming_mcclintock</p>
 <h5> e) Get the logs of the running container </h5>
@@ -116,3 +116,22 @@ default page</h5>
 5.  cd ..<br>
 6.  sudo docker cp hy548/html/public/index.html goofy_ptolemy:/usr/share/nginx/html<br>
 For some reason the index.html is just blank
+<h2> Exercise 4</h2>
+<h5>ollowing the previous exercise, create your own container image, based on Nginx, that
+will contain the CS-548 website instead of the default page. Downloading the CS-548
+repository (and submodules), hugo and building the site should be done in the
+Dockerfile. Create a Docker Hub account and upload the image. Provide</h5>
+<h5>a) The Dockerfile</h5>
+<h5>b) The command needed to upload the image to Docker Hub</h5>
+1. i create a public repository in dockerhub (name: irodotos/nginx-hy548)<br>
+2. i need to tag the image with the repository name<br>
+   <code>sudo docker tag nginx:1.23.3-alpine irodotos/nginx-hy548:latest</code><br>
+3. i need to login in the dockerhub<br>
+   <code> sudo docker login</code><br>
+4. need to push the image to the hub <br>
+   <code> sudo docker push irodotos/nginx-hy548:latest</code><br>
+<h5>Explain:
+c) How much bigger is your own image than the image you were based on. Why;</h5>
+the initial image was 40.7MB but after the build the new image is 115MB. This is beacuse i install some tools (git , make , hugo)
+<h5>d) What have you done in the Dockerfile to keep the image as small as possible?</h5>
+i remove all the unescessary files that install with the apt update
