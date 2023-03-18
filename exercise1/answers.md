@@ -135,3 +135,8 @@ c) How much bigger is your own image than the image you were based on. Why;</h5>
 the initial image was 40.7MB but after the build the new image is 115MB. This is beacuse i install some tools (git , make , hugo)
 <h5>d) What have you done in the Dockerfile to keep the image as small as possible?</h5>
 i remove all the unescessary files that install with the apt update
+<h5>5. Upload the Dockerfile from the previous exercise to your GitHub repository. Create a
+GitHub Action that will automatically build and push the image to your Docker Hub
+account (the workflow should be initiated by the user). Provide the YAML of the
+workflow you made</h5>
+in the file .github/workflows
