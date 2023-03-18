@@ -21,4 +21,4 @@ jobs:
     - name: Build docker image
       run: docker build . --file Dockerfile --tag irodotos/nginx-hy548:latest
     - name: Push docker image
-      run: docker push irodotos/nginx-hy548:lateset
+      run: docker push irodotos/nginx-hy548:latest
