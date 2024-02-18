@@ -6,7 +6,7 @@ RUN apk update && \
     apk add make && \
     git clone https://github.com/chazapis/hy548 && \
     cd hy548 && \
+    git submodule update --init --recursive && \
     make all && \
-    cd .. && \
-    cp hy548/html/public/index.html /usr/share/nginx/html && \
+    cp -r html/public/* /usr/share/nginx/html && \
     rm -rf /var/lib/apt/lists/*
