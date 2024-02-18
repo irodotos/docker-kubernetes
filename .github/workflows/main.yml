@@ -1,0 +1,18 @@
+name: Docker Build and Push image
+
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build and Push the Docker image to Docker Hub
+      run: |
+        docker build -t hy548:latest exercise1/.
+        echo "${{ secrets.MYPASS }}" | docker login -u "irodotos" --password-stdin
+        docker push irodotos/hy548:latest
+        docker logout
