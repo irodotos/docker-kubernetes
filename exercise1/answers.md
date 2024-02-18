@@ -1,13 +1,17 @@
 # Exercise 1
 ## a)
 `docker pull nginx:1.23.3`
+
 `docker pull nginx:1.23.3-alpine`
 ## b)
 `nginx        1.23.3          ac232364af84   11 months ago   142MB`
+
 `nginx        1.23.3-alpine   2bc7edbc3cf2   12 months ago   40.7MB`
 ## c)
 `docker run -d -p 80:80 2bc7edbc3cf2`
+
 `curl localhost:80`
+
 
 <!DOCTYPE html>
 <html>
@@ -35,11 +39,16 @@ Commercial support is available at
 
 ## d)
 `docker ps`
+
+```
 CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS         PORTS                               NAMES
 4bd0d0386e90   2bc7edbc3cf2   "/docker-entrypoint.…"   2 minutes ago   Up 2 minutes   0.0.0.0:80->80/tcp, :::80->80/tcp   admiring_dewdney
+```
 
 ## e)
+
 `docker logs 4bd0d0386e90`
+
 /docker-entrypoint.sh: /docker-entrypoint.d/ is not empty, will attempt to perform configuration
 /docker-entrypoint.sh: Looking for shell scripts in /docker-entrypoint.d/
 /docker-entrypoint.sh: Launching /docker-entrypoint.d/10-listen-on-ipv6-by-default.sh
@@ -74,20 +83,27 @@ CONTAINER ID   IMAGE          COMMAND                  CREATED         STATUS   
 
 
 ## f)
+
 `docker stop 4bd0d0386e90`
 
 ## g)
+
 `docker start 4bd0d0386e90`
 
 ## h)
+
 `docker rm -f 4bd0d0386e90`
 
 # Exercise 2
+
 ## a)
 
 `docker run -d -p 80:80 2bc7edbc3cf2`
+
 `docker exec -it crazy_brown /bin/sh`
+
 `vi /usr/share/nginx/html/index.html`
+
 `curl localhost:80`
 
 <!DOCTYPE html>
@@ -116,11 +132,13 @@ Commercial support is available at
 
 
 ## b)
+
 `docker cp crazy_brown:/usr/share/nginx/html/index.html .`
 
 i change the file title to HY548 and copy it back
 
 `docker cp index.html crazy_brown:/usr/share/nginx/html/index.html`
+
 `curl localhost:80`
 
 <!DOCTYPE html>
@@ -149,18 +167,27 @@ Commercial support is available at
 
 
 ## c)
+
 I cant see the changes beacuse the my changes was only visible to the conteiner that it was running and stop. If i run the same container without delete it the changes will be there. But after delete changes are lost
 
 # Exercise 3
+
 `git clone https://github.com/chazapis/hy548.git`
+
 `sudo apt install hugo`
+
 `git submodule update --init --recursive`
+
 `make all`
+
 `docker run -d -p 8080:80 nginx:1.23.3-alpine`
+
 `docker cp html/public 548a1a631b6d:/usr/share/nginx/html/`
 
 Now i need to change the config in nginx to server from root public
+
 `vi conf.d/default.conf`
+
 ```
  location / {
         root   /usr/share/nginx/html/public;
@@ -168,14 +195,18 @@ Now i need to change the config in nginx to server from root public
     }
 ```
 after that i need to reload nginx 
+
 `nginx -s reload`
+
 ![alt text](hy548-site.png)
 
 # Exercise 4
 
 ## b)
 `docker login`
+
 `docker tag hy548:latest irodotos/hy548:latest`
+
 `docker push irodotos/hy548:latest`
 
 ## c)
@@ -191,6 +222,7 @@ Alpine is 40.7Mb and mine is 143Mb
 
 
 ## d)
+
 I remove all the uselles packages after i am done with them
 
 # Exercise 5
