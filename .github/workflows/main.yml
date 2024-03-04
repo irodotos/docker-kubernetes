@@ -20,4 +20,4 @@ jobs:
       run: docker build -t hy548:latest exercise1/.
 
     - name: Push docker image
-      run: docker push ${{ secrets.DOCKER_USER }}/nginx-hy548
+      run: docker push ${{ secrets.DOCKER_USER }}/hy548:latest
