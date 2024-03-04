@@ -13,6 +13,6 @@ jobs:
     - name: Build and Push the Docker image to Docker Hub
       run: |
         docker build -t hy548:latest exercise1/.
-        echo "${{ secrets.MYPASS }}" | docker login -u "irodotos" --password-stdin
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "irodotos" --password-stdin
         docker push irodotos/hy548:latest
         docker logout
