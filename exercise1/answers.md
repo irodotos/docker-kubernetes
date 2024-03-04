@@ -218,7 +218,7 @@ nginx        1.23.3          ac232364af84   11 months ago   142MB
 nginx        1.23.3-alpine   2bc7edbc3cf2   12 months ago   40.7MB
 ```
 Now my alpine is like normal ngix beacuse i install the packages in my image.
-Alpine is 40.7Mb and mine is 143Mb
+Alpine is 40.7Mb and mine is 143Mb.
 
 
 ## d)
