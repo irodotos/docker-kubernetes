@@ -1,18 +1,24 @@
-name: Docker Build and Push image
+name: docker build and push
 
 on:
   push:
-    paths:
-      - 'Dockerfile'
+    branches: [ master ]
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v3
-    - name: Build and Push the Docker image to Docker Hub
+    - uses: actions/checkout@v2
+    - name: docker login
+      env:
+        DOCKER_USER: ${{secrets.DOCKER_USERNAME}}
+        DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
-        docker build -t hy548:latest exercise1/.
-        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "irodotos" --password-stdin
-        docker push irodotos/hy548:latest
-        docker logout
+        docker login -u $DOCKER_USER -p $DOCKER_PASSWORD 
+    - name: Build docker image
+      run: docker build . --file Dockerfile --tag irodotos/nginx-hy548:$(date +%s)
+    - name: Push docker image
+      run: docker push irodotos/nginx-hy548
