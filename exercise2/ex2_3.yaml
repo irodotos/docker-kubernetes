@@ -40,7 +40,7 @@ data:
     cd hy548
     git submodule update --init --recursive
     make all
-    cp -r public/* /website
+    cp -r /html/public/* /website
 
 ---
 
