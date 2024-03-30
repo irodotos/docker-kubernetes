@@ -34,3 +34,9 @@ i change it to have welcome to MY NEW NGINX
 ## f)
 `kubectl delete -f ex2_1.yaml`
 
+# Exercise 2
+`kubectl apply -f ex2_2.yaml`
+
+![](images/2.png)
+
+
