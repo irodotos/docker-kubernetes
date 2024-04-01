@@ -40,7 +40,7 @@ data:
     cd hy548
     git submodule update --init --recursive
     make all
-    cp -r /html/public/* /website
+    cp -r public/* /website
 
 ---
 
@@ -55,6 +55,13 @@ spec:
       - name: build
         image: ubuntu:20.04
         command: ["/bin/bash", "/scripts/build-script.sh"]
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.1"
+            memory: "128Mi"
         volumeMounts:
         - name: scripts-volume
           mountPath: /scripts
@@ -72,33 +79,7 @@ spec:
 
 ---
 
-apiVersion: v1
-kind: Pod
-metadata:
-  name: nginx-pod
-spec:
-  containers:
-  - name: nginx
-    image: nginx:1.23.3-alpine
-    ports:
-    - containerPort: 80
-    resources:
-      limits:
-        cpu: "0.5"
-        memory: "512Mi"
-      requests:
-        cpu: "0.1"
-        memory: "128Mi"
-    volumeMounts:
-    - name: website-content
-      mountPath: /usr/share/nginx/html
-  volumes:
-  - name: website-content
-    persistentVolumeClaim:
-      claimName: website-content
-
----
-apiVersion: batch/v1
+apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
   name: website-update
@@ -125,3 +106,61 @@ spec:
           - name: website-content
             persistentVolumeClaim:
               claimName: website-content
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      initContainers:
+      - name: wait-for-build
+        image: alpine:3.14
+        command: ['sh', '-c', 'until [ -f /website/index.html ]; sleep 5; done;']
+        volumeMounts:
+        - name: website-content
+          mountPath: /website
+      containers:
+      - name: nginx
+        image: nginx:1.23.3-alpine
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "0.5"
+            memory: "512Mi"
+          requests:
+            cpu: "0.1"
+            memory: "128Mi"
+        volumeMounts:
+        - name: website-content
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: website-content
+        persistentVolumeClaim:
+          claimName: website-content
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service
+spec:
+  selector:
+    app: nginx
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
