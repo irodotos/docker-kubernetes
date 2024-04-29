@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-first
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-first
+  template:
+    metadata:
+      labels:
+        app: flask-first
+    spec:
+      containers:
+        - name: flask-first
+          image: irodotos/hy548:helloEnv
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          env:
+            - name: MESSAGE
+              value: "This is the first service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-first-svc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    app: flask-first
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-second
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-second
+  template:
+    metadata:
+      labels:
+        app: flask-second
+    spec:
+      containers:
+        - name: flask-second
+          image: irodotos/hy548:helloEnv
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "128Mi"
+          env:
+            - name: MESSAGE
+              value: "This is the second service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-second-svc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    app: flask-second
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: flask-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /first
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-first-svc
+                port:
+                  number: 8080
+    - http:
+        paths:
+          - path: /second
+            pathType: Prefix
+            backend:
+              service:
+                name: flask-second-svc
+                port:
+                  number: 8080
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: flask-first
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: flask-first
+  minReplicas: 1
+  maxReplicas: 8
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 80

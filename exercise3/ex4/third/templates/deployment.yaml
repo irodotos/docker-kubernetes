@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.svcName }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.svcName }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.svcName }}
+    spec:
+      containers:
+        - name: {{ .Values.svcName }}
+          image: irodotos/hy548:helloEnv
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+          env:
+            - name: MESSAGE
+              value: {{ .Values.msgString }}

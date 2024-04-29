@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-first
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flask-first
+  template:
+    metadata:
+      labels:
+        app: flask-first
+    spec:
+      containers:
+        - name: flask-first
+          image: irodotos/hy548:helloEnv
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "256Mi"
+          env:
+            - name: MESSAGE
+              value: "This is the first service"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flask-first-svc
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+  selector:
+    app: flask-first
