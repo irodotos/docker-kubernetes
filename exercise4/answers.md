@@ -35,3 +35,14 @@ spec:
 NAME    AGE
 apple   2m13s
 ```
+
+### Ecercise 2
+
+all the nessecary files for the exercise are in the folder ex4.2
+
+#### a)
+```docker build -t irodotos/hy548:ass4-2 .```
+
+#### b)
+```kubectl get pods```
+if status is running they are working
